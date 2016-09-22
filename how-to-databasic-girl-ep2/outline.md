@@ -9,6 +9,34 @@ ROUND()
 GROUP BY
 HAVING
 
+## Phone Numbers
+sprinkles=# SELECT * FROM numbers;
+ id |      name       |    number
+----+-----------------+--------------
+  1 | Math Class Girl | 555-555-4439
+  2 | Starbucks Girl  | 555-555-2433
+  3 | Redhead Girl    | 555-555-1111
+  4 | Steve           | 555-555-0138
+  5 | Froyo Girl      | 555-555-9210
+(5 rows)
+
+
+## Texts
+sprinkles=# SELECT * FROM texts;
+ id |                        text                         | delivery | numbers_id
+----+-----------------------------------------------------+----------+------------
+  1 | sup dawg                                            | incoming |          4
+  2 | not much just playin                                | outgoing |          4
+  3 | thats whatsup. Holla if ya get bored. im so lonely  | incoming |          4
+  4 | uhhh ok                                             | outgoing |          4
+  5 | hey whatsup? ;)                                     | outgoing |          1
+  6 | hey qt ;) ;)                                        | outgoing |          3
+  7 | iv got a bf                                         | incoming |          3
+  8 | :(                                                  | outgoing |          3
+  9 | Hey this is Matt from Froyo Heaven! What's shakin'? | outgoing |          5
+ 10 | Heyy! just at the gym 💪  whats up                   | incoming |          5
+(10 rows)
+
 #Sprinkles Date
 
 #Selfies --> SELECT face, COUNT(face) FROM selfies ---- GROUP BY face;
