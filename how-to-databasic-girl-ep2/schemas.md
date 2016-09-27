@@ -206,7 +206,7 @@ CREATE TABLE texts (
   id INTEGER PRIMARY KEY,
   text VARCHAR(255),
   delivery VARCHAR(8),
-  numbers_id INTEGER
+  numbers_id INTEGER REFERENCES numbers(id)
   );
 
 INSERT INTO texts (id, text, delivery, numbers_id) VALUES
