@@ -11,16 +11,16 @@ sprinkles=# SELECT * FROM numbers;
 
 CREATE TABLE numbers (
   id INTEGER PRIMARY KEY,
-  name TEXT,
-  number INTEGER
+  name VARCHAR(50),
+  number VARCHAR(12)
   );
 
 INSERT INTO numbers (id, name, number) VALUES
-  (1, 'Math Class Girl', 555-555-4439),
-  (2, 'Starbucks Girl', 555-555-2433),
-  (3, 'Redhead Girl', 555-555-1111),
-  (4, 'Steve', 555-555-0138),
-  (5, 'Froyo Girl', 555-555-9210);
+  (1, 'Math Class Girl', '555-555-4439'),
+  (2, 'Starbucks Girl', '555-555-2433'),
+  (3, 'Redhead Girl', '555-555-1111'),
+  (4, 'Steve', '555-555-0138'),
+  (5, 'Froyo Girl', '555-555-9210');
 
 
 __________________________________________________________________
@@ -45,8 +45,8 @@ sprinkles=# SELECT * FROM texts;
 
 CREATE TABLE texts (
   id INTEGER PRIMARY KEY,
-  text TEXT,
-  delivery TEXT,
+  text VARCHAR(255),
+  delivery VARCHAR(8),
   numbers_id INTEGER
   );
 
@@ -59,7 +59,7 @@ INSERT INTO texts (id, text, delivery, numbers_id) VALUES
   (6, 'hey qt ;) ;)',                                        'outgoing', 3),
   (7, 'iv got a bf',                                         'incoming', 3),
   (8, ':(',                                                  'outgoing', 3),
-  (9, 'Hey this is Matt from Froyo Heaven! What's shakin'?', 'outgoing', 5),
+  (9, 'Hey this is Matt from Froyo Heaven! What''s shakin''?', 'outgoing', 5),
   (10, 'Heyy! just at the gym 💪  whats up',                 'incoming', 5);
 
 
@@ -95,8 +95,8 @@ sprinkles=# SELECT * FROM sparkles ORDER BY id;
 
 CREATE TABLE sparkles (
   id INTEGER PRIMARY KEY,
-  item TEXT,
-  category TEXT,
+  item VARCHAR(50),
+  category VARCHAR(20),
   price REAL
   );
 
@@ -156,3 +156,93 @@ sprinkles=# SELECT * FROM selfies;
  23 | Too much ice cream!      | Gym Selfies                   |    95
  24 | Your body is a temple!   | Gym Selfies                   |    93
 (24 rows)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE numbers (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(50),
+  number VARCHAR(12)
+  );
+
+INSERT INTO numbers (id, name, number) VALUES
+  (1, 'Math Class Girl', '555-555-4439'),
+  (2, 'Starbucks Girl', '555-555-2433'),
+  (3, 'Redhead Girl', '555-555-1111'),
+  (4, 'Steve', '555-555-0138'),
+  (5, 'Froyo Girl', '555-555-9210');
+
+CREATE TABLE texts (
+  id INTEGER PRIMARY KEY,
+  text VARCHAR(255),
+  delivery VARCHAR(8),
+  numbers_id INTEGER
+  );
+
+INSERT INTO texts (id, text, delivery, numbers_id) VALUES
+  (1, 'sup dawg',                                            'incoming', 4),
+  (2, 'not much just playin',                                'outgoing', 4),
+  (3, 'thats whatsup. Holla if ya get bored. im so lonely',  'incoming', 4),
+  (4, 'uhhh ok',                                             'outgoing', 4),
+  (5, 'hey whatsup? ;)',                                     'outgoing', 1),
+  (6, 'hey qt ;) ;)',                                        'outgoing', 3),
+  (7, 'iv got a bf',                                         'incoming', 3),
+  (8, ':(',                                                  'outgoing', 3),
+  (9, 'Hey this is Matt from Froyo Heaven! What''s shakin''?', 'outgoing', 5),
+  (10, 'Heyy! just at the gym 💪  whats up',                 'incoming', 5);
+
+CREATE TABLE sparkles (
+  id INTEGER PRIMARY KEY,
+  item VARCHAR(50),
+  category VARCHAR(20),
+  price REAL
+  );
+
+INSERT INTO sparkles (id, item, category, price) VALUES
+  (1,  'Banana Cupcake',                        'Cupcakes',  4.25),
+  (2,  'Dark Chocolate Cupcake',                'Cupcakes',  4.50),
+  (3,  'Pumpkin Cupcake',                       'Cupcakes',  4.25),
+  (4,  'Red Velvet Cupcake',                    'Cupcakes',  4.50),
+  (5,  'Vanilla Milk Chocolate Deluxe Cupcake', 'Cupcakes',  5.25),
+  (6,  'Butter Pecan',                          'Ice Cream', 3.75),
+  (7,  'Coffee Fudge Almond',                   'Ice Cream', 3.75),
+  (8,  'Dark Chocolate',                        'Ice Cream', 3.75),
+  (9,  'Triple Chocolate',                      'Ice Cream', 4.75),
+  (10, 'Vanilla Bean',                          'Ice Cream', 3.75),
+  (11, 'Sparkles Sundae',                       'Ice Cream', 6.75),
+  (12, 'Double Scoop Sundae',                   'Ice Cream', 7.75),
+  (13, 'Triple Scoop Sundae',                   'Ice Cream', 9.75),
+  (14, 'Sparkles Shake',                        'Ice Cream', 8.50),
+  (15, 'Chocolate Chip Cookie',                 'Cookies',   3.00),
+  (16, 'Sparkles Sig Peanut Butter Cookie',     'Cookies',   4.50),
+  (17, 'Fudge Brownie',                         'Cookies',   3.00);
