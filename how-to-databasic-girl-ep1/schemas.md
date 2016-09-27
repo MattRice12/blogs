@@ -15,9 +15,6 @@ INSERT INTO froyo_heaven (id, flavor, price) VALUES
   (8, 'Banana Islander',           3.50);
 
 
-
-
-
 CREATE TABLE friends (
   id INTEGER PRIMARY KEY,
   froyo_heaven_id INTEGER REFERENCES froyo_heaven(id),
