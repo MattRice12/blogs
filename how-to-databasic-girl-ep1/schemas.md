@@ -21,3 +21,12 @@ CREATE TABLE friends (
   first_name VARCHAR(50)
   last_name VARCHAR(50)
   );
+
+INSERT INTO friends (id, froyo_heaven_id, first_name, last_name) VALUES
+  (1, 1, Becky,     Basique),
+  (2, 7, Abigail,   Jones),
+  (3, 8, Jan,       Smith),
+  (4, 2, Tiffany,   Flanders),
+  (5, 4, Catherine, Flanders),
+  (6, 5, Sharon,    Williams),
+  (7, 3, Debra,     Jackson);
