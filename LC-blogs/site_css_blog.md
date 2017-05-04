@@ -31,8 +31,6 @@
 		```
 		(For creating your own CSS grid, check out: http://j4n.co/blog/Creating-your-own-css-grid-system)
 
-
-
   II. The Mistakes
 
     **Mistake #1: Modifying Abstract Classes (OCP)**
@@ -57,7 +55,7 @@
 
 		So far so good (as will be explained later, this is a safe and proper way to extend core grid structure). I continued building the site with this in mind--create new, more specific classes to build upon the old, more general classes.
 
-		The mistake occurred when I decided to take a step back and refactor my CSS. I grew increasingly anxious as I soon had some blocks with 5 or more classes, each having a particularly important structural, organizational, or presentational responsibility. I studied the code some and realized that almost all `.container` blocks needed the margin-top and flex properties in `.services`. So I could modify the core grid system, reduce `.container.services` down to `.container`, and add extensions to the fewer `.container` blocks that needed different properties.
+		The mistake occurred when I decided to take a step back and refactor my CSS. I grew increasingly anxious as I soon had some blocks with 5 or more classes, each having a particularly important structural, organizational, or presentational responsibility. I studied the code some and realized that almost all `.container` blocks needed the margin-top and flex properties in `.services`. So I decided to modify the core grid system, reduce `.container.services` down to `.container`, and add extensions to the fewer `.container` blocks that needed different properties.
 
 		```grid.scss
 
@@ -72,10 +70,10 @@
 			// Deleted '.container.services'
 		```
 
-		This doesn't seem like a bad idea outright. However, more `.container` blocks than I accounted for were affected. It also created some unpredictable behavior with other structural classes that I did not account for.
+		This doesn't seem like a bad idea outright. However, more `.container` blocks than I accounted for were affected. It also created some unpredictable behavior with other structural classes which relied on the original `.container` block that I did not account for.
 
     **Mistake #2: Modifying Abstract Classes in the Wrong File (SRP)**
-  	What's worse, tather than modifying `.container` in `grid.scss`, I modified `.container` in the `.services.scss`. So rather than the `grid.scss` as displayed immediately above, it looked more like this:
+  	What's worse, rather than modifying `.container` in `grid.scss`, I modified `.container` in the `.services.scss`. So rather than the `grid.scss` as displayed immediately above, it looked more like this:
 
 		```grid.scss
 
@@ -94,18 +92,18 @@
 			}
 		```
 
-		This mistake was partly due to not completely understanding the codebase and the importance of having a separate grid file. It was also partly due to the fact that I already had `.container.services` defined in `.services.scss` and just deleted the `.services` class to quickly implement the change. Finally, it was partly due to the fact that I was refactoring 8 CSS files (1 for each service page) into 1 file and making sure they stayed stylistically consistent and unbroken (while not giving appropriate consideration to the other pages on the site).
+		Now the problem I created was split and hidden in two different locations. This mistake was partly due to not completely understanding the codebase and the importance of having a separate grid file. It was also partly due to the fact that I already had `.container.services` defined in `.services.scss` and thought that by just deleting the `.services` class, I'd avoid tangling code up by moving stuff around. If the code was here before I deleted the class, it probably should stay here after I deleted the class. This was a bad decision.
 
-    I wrongly assumed only the service pages would be affected by my changes. As a result, this caused the changes to the main site to go unnoticed. Ideally, this would be caught in code-review. However, just by looking at the code it's much harder to identify design problems. And the links I posted on the pull request to visually review the sight only focused on the service pages.
+    Furthermore, because the CSS was in `services.scss`, I made the embarrassing assumption that only the service pages would be affected by my changes. As a result, this caused the changes to the main site to go unnoticed. Ideally, this would be caught in code-review. However, just by looking at the code it's much harder to identify design problems. And the links I posted on the pull request to visually review the sight only focused on the service pages.
 
     **Mistake #3: Modifying Abstract Classes in Wrong Files and then Patching the Now Broken Abstractions (DIP)**:
-    The above problems get compounded the longer it takes to notice the problem. First, the longer a problem goes unnoticed, the harder it is to identify the source of the problem. If you notice it immediately, you can make a causal connection and reverse the change you made. However, if it occurs even a few minutes later you may have already made enough changes to not know the source. Second, the longer the problem goes unnoticed, the more likely it is to not understand that a misaligned block is evidence of a larger problem.
+    The above problem got compounded the longer it took me to notice the problem. In general, the longer a problem goes unnoticed, the harder it is to identify the source of the problem. If you notice it immediately, you can make a causal connection and reverse the change you made. However, if it occurs even a few minutes later you may have already made enough changes to not know the source. Moreover, the longer the problem goes unnoticed, the more likely it is to not understand that a misaligned block is evidence of a larger problem.
 
-		If you can't find the source of the problem or don't know that there is a problem, the quick solution is to create a new class to patch up and fix the error. This is bad because by adding bandages, we are only treating the problem rather than fixing it. And unless the underlying problem is fixed, the problem may keep resurfacing, requiring more bandages to treat it. Moreover, if the underlying problem is on a very general level block like a `.container`, each container will require some amount of treatment. In the end, we have unnecessarily bloated code, making it harder to find the source of the problem, and making it harder to fix the problem once we finally do identify it.
+		Because I didn't know the problem existed for a while, I continuously bandaged it up whenever it appeared. This is bad because by adding bandages, I was only treating the problem rather than fixing it. And unless the underlying problem is fixed, the problem may keep resurfacing (which it did), requiring more bandages to treat it (which it did). Moreover, if the underlying problem is on a very general level block like a `.container`, each container will require some amount of treatment. In the end, we have unnecessarily bloated code, making it harder to find the source of the problem, and making it harder to fix the problem once we finally do identify it.
 
 	III. A SOLID Solution
 
-    The best solution is, of course, to find the source of the problem and fix it. However, unless you develop some sort of system when writing CSS, the same types of problems are going to occur again and again.
+    The best solution is, of course, to find the source of the problem and fix it. However, unless you develop some sort of system when writing CSS, you're not going to be able to identify when there is a problem. And even if you do identify the problem quickly, you'll be spending unnecessary time fixing problems that could have been prevented.
 
 		I looked through a few CSS methodologies to keep things organized. One is the Block, Element, Modifier (BEM) methodology (see https://css-tricks.com/bem-101/), which I think could be very useful when writing and organizing large CSS projects.
 
