@@ -1,5 +1,5 @@
 # Essay
-  @Intro:
+  **Introduction**
     This blog post details the CSS issues I encountered while building several pages for a company website. In this blog, I discuss the issue itself, my three main mistakes that lead to the issue, and using SOLID principles when writing CSS to avoid these issues.
 
   I. The Project
@@ -107,7 +107,7 @@
 
 		I looked through a few CSS methodologies to keep things organized. One is the Block, Element, Modifier (BEM) methodology (see https://css-tricks.com/bem-101/), which I think could be very useful when writing and organizing large CSS projects.
 
-		However, I wanted to find a more fundamental system that applies regardless of the preferred CSS methodology. What I found was the classic: SOLID principles. I covered these principles when learning Ruby, JavaScript, Golang, and so on. But I was curious to see how SOLID applied to CSS. To stay within the topic of this blog post, I am only covering the SOLID principles that are relevant to my problem. But please take the time to read the sources I provide to get a better understanding of how the other SOLID principles apply to CSS.
+		However, I wanted to find a more fundamental system that applies regardless of the preferred CSS methodology. What I found was the classic: SOLID principles. I covered these principles when learning Ruby, JavaScript, Golang, and so on. But I was curious to see how SOLID applied to CSS. 
 
 	  **SOLID principles**
 		For this, I relied heavily on the following sources:
@@ -116,8 +116,6 @@
 			- The single responsibility principle applied to CSS, https://csswizardry.com/2012/04/the-single-responsibility-principle-applied-to-css/
 			- The open/closed principle applied to CSS, https://csswizardry.com/2012/06/the-open-closed-principle-applied-to-css/
 
-		I will cover the relevant SOLID principles in the order that I violated them (See Mistake #1-3 above):
-
 		*Open/Close Principle*
 		The Open/Close Principle is the idea is that base abstractions should be open for extension but closed for modification. Modifying base abstractions is generally a bad idea and should be done very rarely if at all. In my case, the base abstractions were my grid classes.
 
@@ -125,18 +123,26 @@
 
 		The problem with modifying the grid is that it affects virtually everything, since everything is built upon the grid. And if you are modifying the grid midway through creating a site, you are not immediately aware of every place that the modification affects. Contrarily, by using specific classes to add new behavior, the only blocks that are affected are the ones to which you consciously and deliberately append the class.
 
+		*Interface Segregation Principle*
+		This also involved Mistake #1. Interface Segregation Principle (ISP) means many client specific interfaces are better than one general purpose interface. In other words, no element should be forced to implement an interface it doesn’t use.
+
+		By adding the properties in `.services` to `.container`, I made `.container` into a much more general purpose block. As a result, many applications of `.container` didn't need the baggage that now came with `.container`, and I had to create more specific classes to remove that baggage.
+
 		*Single Responsibility Principle*
-		The Single Responsibility Principle (SRP) is helpful to keep in mind in the beginning when defining your site structure in CSS and also later when deciding whether or not to combine classes or keep them separate. SRP in CSS means we should separate structure from presentation.
+		The Single Responsibility Principle (SRP) is helpful when defining your site structure in CSS and also later when deciding whether or not to combine classes or keep them separate. SRP in CSS means we should separate structure from presentation.
 
 		I violated SRP in two ways. First, and perhaps worst is at the application-level, where I modified my grid system outside of the grid file. By having `.container` defined in two separate files, I couldn't quickly determine what the container block did or that it was problematic. Instead, any changes to `.container` should have occurred only in the `.container` class inside `grid.scss`.
 
 		Second, I violated SRP at the code-level. In my services file, I frequently mixed structural and presentational CSS within single classes. This bloated my CSS by making classes larger than they need to be and inhibited their re-usability. Because code wasn't re-usable, I was more frequently repeating myself which made my code not DRY.
 
+		*Liskov Substitution Principle*
+		This last point implicates the Liskov Substitution Principle. According to this principle, objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program. A way to interpret this in CSS is that classes that extend a base class shouldn’t have a different behavior than the base class they extend. In other words, if `.image-block` is intended to extend `.container`, it should only affect structural properties and should not include presentational properties such as border, background color, etc. However, because I was mixing structural and presentational CSS within a single class, I was violating LSP as well as SRP mentioned above.
+
 		*Dependency Inversion Principle*
 	  Finally, The Dependency Inversion Principle (DIP) also plays an important role. This principle states that "Abstractions should not depend upon details. Details should depend upon abstractions." Contrarily, by adding bandages to treat a broken grid-system (my abstractions), the functionality of abstractions depended on more specific, detail-like classes.
 
 	**Conclusion**
-		Keeping these principles in mind when writing CSS helps keep the code predictable and untangled. Additionally, but not mixing abstractions with details, classes become more re-usable, thus keeping your CSS files DRY. The benefit of of shorter and more predictable code is that problems are much easier to diagnose and fix completely rather than treat temporarily. Moreover, if everyone on the team is aware of SOLID CSS (and maybe even for those who are unaware), code review becomes much easier.
+		Keeping these principles in mind when writing CSS helps keep the code predictable and untangled. Additionally, but not mixing abstractions with details, classes become more re-usable, thus keeping your CSS files DRY. The benefit of of shorter and more predictable code is that problems are much easier to diagnose and fix completely rather than treat temporarily. Moreover, if everyone on the team implements SOLID principles when writing CSS, code review becomes much easier.
 
 Sources and Further Reading:
 
