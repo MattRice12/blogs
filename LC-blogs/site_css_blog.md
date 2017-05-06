@@ -130,17 +130,29 @@ For this, I relied heavily on the following sources:
 
 **Open/Close Principle**
 
-The Open/Close Principle is the idea is that base abstractions should be open for extension but closed for modification. Modifying base abstractions is generally a bad idea and should be done very rarely if at all. In my case, the base abstractions were my grid classes.
+The Open/Close Principle (OCP) is the idea is that base abstractions should be open for extension but closed for modification. Modifying base abstractions is generally a bad idea and should be done very rarely if at all. Modifying abstractions is likely to cause conflicts in the details that depend on them.
 
-Following this principle, I should not have changed my grid system directly. Had I stuck with my initial approach of adding additional, specific classes extending the functionality of the grid, I would not have run into the problem. Yes, my HTML would have had more classes, but it would have at least been straightforward and readable (unlike most of CSS).
-
-The problem with modifying the grid is that it affects virtually everything, since everything is built upon the grid. And if you are modifying the grid midway through creating a site, you are not immediately aware of every place that the modification affects. Contrarily, by using specific classes to add new behavior, the only blocks that are affected are the ones to which you consciously and deliberately append the class.
+In my case, the base abstractions were my grid classes. Thus, I violated OCP by modifying the grid directly when combining `.container` with `.services`. Rather, I should have stuck with my initial approach of extending the grid by adding additional, specific classes. Conflicts arose by modifying the grid because everything in the site was built on top of the grid. Moreover, specific instances the grid  reflected changes in different, unpredictable ways, depending on what other classes extended the grid in that instance. What's worse, many of the conflicts that arose were not immediately obvious and took longer and more work to rectify. I ended up adding more classes than I reduced to temporarily fix the problem, making the HTML and CSS unnecessarily bloated.
 
 **Interface Segregation Principle**
 
-This also involved Mistake #1. Interface Segregation Principle (ISP) means many client specific interfaces are better than one general purpose interface. In other words, no element should be forced to implement an interface it doesn’t use.
+Interface Segregation Principle (ISP) means many client specific interfaces are better than one general purpose interface. In other words, no element should be forced to implement an interface it doesn’t use.
 
-By adding the properties in `.services` to `.container`, I made `.container` into a much more general purpose block. As a result, many applications of `.container` didn't need the baggage that now came with `.container`, and I had to create more specific classes to remove that baggage.
+By adding the properties in `.services` to `.container`, I made `.container` into a much more general purpose block. As a result, many applications of `.container` didn't need the baggage that now came with `.container`, and I had to create additional, specific classes to remove that baggage.
+
+My opinion on this is that doing so to a small extent is not egregious. The following example is okay even though I may later add a specific class to a container that sets `justify-content: space-between;`. It becomes a problem when excessively adding properties, especially non-structure properties to the abstraction. You may notice it is a problem further down the road when you end up creating a class for almost every container that changes the properties you set in your abstraction. However, by the time you notice the problem, it may be too late and very dangerous to fix. Therefore, I think setting up a minimal grid is okay, even if you have to append an additional class to overwrite some properties later.
+
+```css
+// grid.scss
+
+.container {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+}
+```
 
 **Single Responsibility Principle**
 
@@ -148,11 +160,11 @@ The Single Responsibility Principle (SRP) is helpful when defining your site str
 
 I violated SRP in two ways. First, and perhaps worst is at the application-level, where I modified my grid system outside of the grid file. By having `.container` defined in two separate files, I couldn't quickly determine what the container block did or that it was problematic. Instead, any changes to `.container` should have occurred only in the `.container` class inside `grid.scss`.
 
-Second, I violated SRP at the code-level. In my services file, I frequently mixed structural and presentational CSS within single classes. This bloated my CSS by making classes larger than they need to be and inhibited their re-usability. Because code wasn't re-usable, I was more frequently repeating myself which made my code not DRY.
+Second, I violated SRP at the code-level. In my services file, I frequently mixed structural and presentational CSS within single classes. This bloated my CSS by making classes larger than they need to be and inhibited their re-usability. Because code wasn't re-usable, I was more frequently repeating myself which made my code not DRY. The Liskov Substitution Principle also implicates this, so I give the example below.
 
 **Liskov Substitution Principle**
 
-This last point implicates the Liskov Substitution Principle. According to this principle, objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program. A way to interpret this in CSS is that classes that extend a base class shouldn’t have a different behavior than the base class they extend. In other words, if `.image-block` is intended to extend `.container`, it should only affect structural properties and should not include presentational properties such as border, background color, etc. However, because I was mixing structural and presentational CSS within a single class, I was violating LSP as well as SRP mentioned above.
+This last point implicates the Liskov Substitution Principle. According to this principle, objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program. A way to interpret this in CSS is that classes that extend a base class shouldn’t behave differently than the base class. In other words, if `.services-header-block` is intended to extend `.container`, it should only affect structural properties and should not include presentational properties such as border, background color, etc. However, because I was mixing structural and presentational CSS within a single class, I was violating LSP as well as SRP mentioned above.
 
 **Dependency Inversion Principle**
 
@@ -161,6 +173,47 @@ Finally, The Dependency Inversion Principle (DIP) also plays an important role. 
 ## Conclusion
 
 Keeping these principles in mind when writing CSS helps keep the code predictable and untangled. Additionally, but not mixing abstractions with details, classes become more re-usable, thus keeping your CSS files DRY. The benefit of of shorter and more predictable code is that problems are much easier to diagnose and fix completely rather than treat temporarily. Moreover, if everyone on the team implements SOLID principles when writing CSS, code review becomes much easier.
+
+Below I provided a simplified example, but view this codepen (https://codepen.io/mattricedev/project/editor/XxvMGD/) to see it working inside of a small project. Notice the separation of concerns.
+
+```css
+// grid.scss
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+}
+
+// services.scss
+
+.container {
+	&.services-header {
+		&.block {
+			justify-content: space-between;
+		}
+		&.style {
+			background-color: #373737;
+			color: #00D8FF;
+			border-bottom: 10px solid #222;
+		}
+	}
+
+	&.services-body {
+		&.block {
+      display: flex;
+      flex-wrap: wrap;
+      width: 640px;
+    }
+    &.style {
+      .column h2 {color: #00D8FF}
+    }
+	}
+}
+
+```
 
 ## Sources and Further Reading:
 
