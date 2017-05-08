@@ -21,14 +21,14 @@ In addition to keeping each service page consistent, I wanted to maintain some s
       flex-basis: 40%;
     }
 
-		&.half {
-			width: 49%;
-		}
+    &.half {
+	  width: 49%;
+    }
 
-		&.third {
-			width: 32%;
-		}
-	}
+    &.third {
+	  width: 32%;
+    }
+  }
 }
 ```
 
@@ -44,8 +44,8 @@ After I began, I noticed structural changes I needed to make to the service page
 // grid.scss
 
 .container {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 ```
 
@@ -53,9 +53,9 @@ After I began, I noticed structural changes I needed to make to the service page
 // services.scss
 
 .container.services {
-	margin-top: 40px;
-	justify-content: center;
-	align-items: center;
+  margin-top: 40px;
+  justify-content: center;
+  align-items: center;
 }
 ```
 
@@ -64,15 +64,15 @@ So far so good (as will be explained later, this is a safe and proper way to ext
 The mistake occurred when I decided to take a step back and refactor my CSS. I grew increasingly anxious as I soon had some HTML elements with 5 or more classes, each class having a particularly important structural, organizational, or presentational responsibility. I realized that almost all `.container` blocks needed the margin-top and flex properties in `.services`. So I decided to modify the core grid system, reduce `.container.services` down to `.container`, and add extensions to the fewer `.container` blocks that needed different properties.
 
 ```css
-	// grid.scss
+// grid.scss
 
-	.container {
-		display: flex;
-		flex-wrap: wrap;
-		margin-top: 40px;
-		justify-content: center;
-		align-items: center;
-	}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  justify-content: center;
+  align-items: center;
+}
 ```
 
 This doesn't seem like a bad idea outright. However, more `.container` blocks than I accounted for were affected. This change also created some unpredictable behavior with other structural classes which relied on the original `.container` block. Specifically, every page's header and footer were wrapped in a `.container`, leaving a nice 40px white gap immediately above them. This should be a quick and easy fix. *Should be*.
@@ -85,8 +85,8 @@ Rather than modifying `.container` in `grid.scss`, I modified `.container` in th
 // grid.scss
 
 .container {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 ```
 
@@ -94,9 +94,9 @@ Rather than modifying `.container` in `grid.scss`, I modified `.container` in th
 // services.scss
 
 .container {
-	margin-top: 40px;
-	justify-content: center;
-	align-items: center;
+  margin-top: 40px;
+  justify-content: center;
+  align-items: center;
 }
 ```
 
@@ -250,11 +250,11 @@ My opinion on this is that doing so to a small extent is not egregious. The foll
 ```css
 // okay
 .container {
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: center;
-	align-items: center;
-	width: 100vw;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
 }
 
 // bad
@@ -280,11 +280,11 @@ Now, because I didn't follow the Interface Segregation Principle, I have to crea
 
 ```css
 .container {
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: center;
-	align-items: center;
-	width: 100vw;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
 
   &.header-block {
     font-size: 1.5em;
@@ -313,19 +313,21 @@ Now, because I didn't follow the Interface Segregation Principle, I have to crea
 
 Keeping these principles in mind when writing CSS helps keep the code predictable and untangled. Additionally, by not mixing abstractions with details, classes become more re-usable, thus keeping your CSS files DRY. The benefit of of shorter and more predictable code is that problems are much easier to diagnose and fix completely rather than treat temporarily. Moreover, if everyone on the team implements SOLID principles when writing CSS, code review becomes much easier.
 
-Below I provided a simplified example to highlight the concepts covered. To see something functional with HTML, check out this codepen (https://codepen.io/mattricedev/pen/eWyvPe).
+Below I provided a simplified example to highlight the concepts covered. To see something functional with HTML, check out [this codepen](https://codepen.io/mattricedev/pen/eWyvPe).
 
 ```css
 // grid.scss
 
 .container {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
-	width: 100vw;
+  width: 100vw;
+  
   &.center {
     justify-content: center;
   }
+  
   &.space-between {
     justify-content: space-between;
   }
@@ -353,7 +355,7 @@ Below I provided a simplified example to highlight the concepts covered. To see 
       padding: 0 5vw;
       .column h2 {color: #00D8FF}
     }
-	}
+  }
 
   &.footer {
     &.services {
