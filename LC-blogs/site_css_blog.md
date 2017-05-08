@@ -32,11 +32,11 @@ In addition to keeping each service page consistent, I wanted to maintain some s
 }
 ```
 
-(For creating your own CSS grid, check out: http://j4n.co/blog/Creating-your-own-css-grid-system)
+[Guide to creating your own CSS grid](http://j4n.co/blog/Creating-your-own-css-grid-system)
 
 ## The Mistakes
 
-**Mistake #1: Modifying Abstract Classes (OCP)**
+**Mistake #1: Modifying Abstract Classes**
 
 After I began, I noticed structural changes I needed to make to the service pages. I needed to add a margin-top and some flex properties to a container block but I also wanted to limit it to only the area on the page that I was changing (as opposed to every container block on the site). To do so, I created a new class `.services` containing the margin and flex properties and appended it to `.container`, creating `.container.services`.
 
@@ -77,7 +77,7 @@ The mistake occurred when I decided to take a step back and refactor my CSS. I g
 
 This doesn't seem like a bad idea outright. However, more `.container` blocks than I accounted for were affected. This change also created some unpredictable behavior with other structural classes which relied on the original `.container` block. Specifically, every page's header and footer were wrapped in a `.container`, leaving a nice 40px white gap immediately above them. This should be a quick and easy fix. *Should be*.
 
-**Mistake #2: Modifying Abstract Classes in the Wrong File (SRP)**
+**Mistake #2: Modifying Abstract Classes in the Wrong File**
 
 Rather than modifying `.container` in `grid.scss`, I modified `.container` in the `.services.scss`. So rather than the `grid.scss` as displayed immediately above, it looked more like this:
 
@@ -104,7 +104,7 @@ Now the problem I created was split and hidden in two different locations. This 
 
 Furthermore, because the CSS was in `services.scss`, I made the embarrassing assumption that only the service pages would be affected by my changes. As a result, this caused the changes to the main site to go unnoticed. Ideally, this would be caught in code-review. However, just by looking at the code it's much harder to identify design problems. And the links I posted on the pull request to visually review the sight only focused on the service pages.
 
-**Mistake #3: Modifying Abstract Classes in Wrong Files and then Patching the Now Broken Abstractions (DIP)**
+**Mistake #3: Modifying Abstract Classes in Wrong Files and then Patching the Now Broken Abstractions**
 
 The problem got compounded the longer it took me to notice the problem. In general, the sooner you notice a problem, the more likely you can make a causal connection between the change and the problem and reverse it. However, if the problem occurs even a few minutes later you may have already made enough changes to not know its source.
 
@@ -123,10 +123,11 @@ However, I wanted to find a more fundamental system that applies regardless of t
 **SOLID principles**
 
 For this, I relied heavily on the following sources:
-- Solid CSS, http://blog.millermedeiros.com/solid-css/
-- SOLID Object Oriented Principles And CSS: Part 1 & 2, http://vanseodesign.com/web-design/solid-oo-principles-1/
-- The single responsibility principle applied to CSS, https://csswizardry.com/2012/04/the-single-responsibility-principle-applied-to-css/
-- The open/closed principle applied to CSS, https://csswizardry.com/2012/06/the-open-closed-principle-applied-to-css/
+
+- [Solid CSS](http://blog.millermedeiros.com/solid-css/)
+- [SOLID Object Oriented Principles And CSS: Part 1 & 2](http://vanseodesign.com/web-design/solid-oo-principles-1/)
+- [The single responsibility principle applied to CSS](https://csswizardry.com/2012/04/the-single-responsibility-principle-applied-to-css/)
+- [The open/closed principle applied to CSS](https://csswizardry.com/2012/06/the-open-closed-principle-applied-to-css/)
 
 **Single Responsibility Principle**
 
@@ -162,9 +163,10 @@ Practically speaking, however, I don't think this principle is useful to do in e
 }
 ```
 See larger examples here:
-Pre-SRP:  https://codepen.io/mattricedev/pen/jmYrOQ
-Post-SRP with `block/style` distinction: https://codepen.io/mattricedev/pen/LyeZPZ
-Post-SRP with `extend`: https://codepen.io/mattricedev/pen/rmpLOB
+
+- [Pre-SRP](https://codepen.io/mattricedev/pen/jmYrOQ)
+- [Post-SRP with block/style distinction](https://codepen.io/mattricedev/pen/LyeZPZ)
+- [Post-SRP with extend](https://codepen.io/mattricedev/pen/rmpLOB)
 
 Adding this structure adds 4 extra lines. It's not so bad, but when you're doing it for every element, it gets unnecessarily bloated. Additionally, none of these blocks or styles are very re-usable.
 
@@ -313,7 +315,7 @@ Now, because I didn't follow the Interface Segregation Principle, I have to crea
 
 Keeping these principles in mind when writing CSS helps keep the code predictable and untangled. Additionally, by not mixing abstractions with details, classes become more re-usable, thus keeping your CSS files DRY. The benefit of of shorter and more predictable code is that problems are much easier to diagnose and fix completely rather than treat temporarily. Moreover, if everyone on the team implements SOLID principles when writing CSS, code review becomes much easier.
 
-Below I provided a simplified example to highlight the concepts covered. To see something functional with HTML, check out [this codepen](https://codepen.io/mattricedev/pen/eWyvPe).
+Below I provided a simplified example to highlight the concepts covered. To see something functional with HTML, [check out this codepen](https://codepen.io/mattricedev/pen/eWyvPe).
 
 ```css
 // grid.scss
@@ -323,11 +325,11 @@ Below I provided a simplified example to highlight the concepts covered. To see 
   flex-wrap: wrap;
   align-items: flex-start;
   width: 100vw;
-  
+
   &.center {
     justify-content: center;
   }
-  
+
   &.space-between {
     justify-content: space-between;
   }
@@ -353,7 +355,9 @@ Below I provided a simplified example to highlight the concepts covered. To see 
     &.services {
       width: 640px;
       padding: 0 5vw;
-      .column h2 {color: #00D8FF}
+      .column h2 {
+        color: #00D8FF;
+      }
     }
   }
 
@@ -367,10 +371,10 @@ Below I provided a simplified example to highlight the concepts covered. To see 
 
 ## Sources and Further Reading:
 
-1. *SOLID CSS*, http://blog.millermedeiros.com/solid-css/
-2. *SOLID Object Oriented Principles And CSS: Part 1*, http://vanseodesign.com/web-design/solid-oo-principles-1/
-3. *SOLID Object Oriented Principles And CSS: Part 2*, http://vanseodesign.com/web-design/solid-oo-principles-2/
-4. *The single responsibility principle applied to CSS*, https://csswizardry.com/2012/04/the-single-responsibility-principle-applied-to-css/
-5. *The open/closed principle applied to CSS*, https://csswizardry.com/2012/06/the-open-closed-principle-applied-to-css/
-6. *Creating your own Grid System*, http://j4n.co/blog/Creating-your-own-css-grid-system
-7. *BEM 101*, https://css-tricks.com/bem-101/
+1. *SOLID CSS*, [http://blog.millermedeiros.com/solid-css/](http://blog.millermedeiros.com/solid-css/)
+2. *SOLID Object Oriented Principles And CSS: Part 1*, [http://vanseodesign.com/web-design/solid-oo-principles-1/](http://vanseodesign.com/web-design/solid-oo-principles-1/)
+3. *SOLID Object Oriented Principles And CSS: Part 2*, [http://vanseodesign.com/web-design/solid-oo-principles-2/](http://vanseodesign.com/web-design/solid-oo-principles-2/)
+4. *The single responsibility principle applied to CSS*, [https://csswizardry.com/2012/04/the-single-responsibility-principle-applied-to-css/](https://csswizardry.com/2012/04/the-single-responsibility-principle-applied-to-css/)
+5. *The open/closed principle applied to CSS*, [https://csswizardry.com/2012/06/the-open-closed-principle-applied-to-css/](https://csswizardry.com/2012/06/the-open-closed-principle-applied-to-css/)
+6. *Creating your own Grid System*, [http://j4n.co/blog/Creating-your-own-css-grid-system](http://j4n.co/blog/Creating-your-own-css-grid-system)
+7. *BEM 101*, [https://css-tricks.com/bem-101/](https://css-tricks.com/bem-101/)
