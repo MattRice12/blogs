@@ -214,10 +214,10 @@ INSERT INTO texts (id, text, delivery, numbers_id) VALUES
   (2, 'not much just playin',                                'outgoing', 4),
   (3, 'thats whatsup. Holla if ya get bored. im so lonely',  'incoming', 4),
   (4, 'uhhh ok',                                             'outgoing', 4),
-  (5, 'hey whatsup? ;)',                                     'outgoing', 1),
-  (6, 'hey qt ;) ;)',                                        'outgoing', 3),
+  (5, 'hey whatsup? 😉',                                     'outgoing', 1),
+  (6, 'hey qt 😘😘',                                        'outgoing', 3),
   (7, 'iv got a bf',                                         'incoming', 3),
-  (8, ':(',                                                  'outgoing', 3),
+  (8, '☹️',                                                  'outgoing', 3),
   (9, 'Hey this is Matt from Froyo Heaven! What''s shakin''?', 'outgoing', 5),
   (10, 'Heyy! just at the gym 💪  whats up',                 'incoming', 5);
 
