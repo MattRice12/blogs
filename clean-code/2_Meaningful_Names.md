@@ -49,10 +49,6 @@
   4. Pronounceable Names
     - Names are easier to read and understand if they are pronounceable.
 
-  5. Pick One Word per Concept (Consistent Convention)
-    - Similar methods should have the same predicate `get`, `retrieve`, `fetch`. Pick one and stick with it; don't mix them.
-    - Consistency adds information.
-
   6. Use Searchable Names
     - Single letter variables are very hard to search
     - Searching numbers is also difficult; instead, assign numbers to constants and give constants searchable names.
@@ -61,6 +57,11 @@
     - Even still, single letter variables obscure purpose and add small, but cumulative delays.
     - Loop counters (`i`, `j`) are okay.
     - The length of a name should correspond to the size of its scope.
+
+  5. Pick One Word per Concept (Consistent Convention)
+    - Similar methods should have the same predicate `get`, `retrieve`, `fetch`. Pick one and stick with it; don't mix them.
+    - Consistency adds information.
+
 
   7. Class Names
     - Classes and Objects should have noun or noun phrase names like `Customer`, `WikiPage`, `AddressParser`, etc.
