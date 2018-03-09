@@ -29,9 +29,9 @@ Below are three different ways to write a SQL query. I personally prefer the lat
 
 The different ways to write SQL in Rails are divided into two main categories: Speed vs Convenience.
 
-The first 3 described below use ActiveRecord::Base.connection and result in two classes that are ultimately stringified hashes. The benefit here is that ActiveRecord doesn't have to do the work of instantiating a new model object for each row in the results. This results in improved performance.
+The first 3 described below use ActiveRecord::Base.connection and result in two classes that are ultimately stringified hashes. The benefit here is that Rails doesn’t have to do the work of instantiating a new ActiveRecord objects for each row in the results. Instantiating ActiveRecord objects is slow. Avoiding that improves performance.
 
-But where ActiveRecord::Base.connection offers speed, Model.find_by_sql offers convenience. Here, ActiveRecord instantiates new `ActiveModel` objects which have the typical ActiveRecord functionality such as associations and dot notation, shortening our work.
+But where ActiveRecord::Base.connection is more performant, Model.find_by_sql is more convenient. Here, Model.find_by_sql returns ActiveRecord objects which include functionality such as associations and dot notation, shortening and simplifying our work.
 
 ## Speed
 
@@ -48,7 +48,7 @@ But where ActiveRecord::Base.connection offers speed, Model.find_by_sql offers c
     records_array = ActiveRecord::Base.connection.execute(sql)
   ```
 
-  This produces a PG::Result object https://deveiate.org/code/pg/PG/Result.html. PG::Result includes a set of methods you can use on the dataset. In addition, the PG::Result object is an array of stringified hashes, the normal Ruby and Rails methods for arrays and hashes work on this dataset as well.
+  This produces a PG::Result object. PG::Result includes a set of methods you can use on the dataset. In addition, the PG::Result object is an array of stringified hashes; therefore, the normal Ruby and Rails methods for arrays and hashes work on this dataset as well.
 
   Use `records_array.values` to see the values
 
@@ -58,7 +58,7 @@ But where ActiveRecord::Base.connection offers speed, Model.find_by_sql offers c
     records_array = ActiveRecord::Base.connection.exec_query(sql)
   ```
 
-  This produces a ActiveRecord::Result object http://api.rubyonrails.org/classes/ActiveRecord/Result.html. Ironically, ActiveRecord::Result does not offer the ActiveRecord conveniences of associations and dot notation. ActiveRecord::Result is more like PG::Result; and though it has fewer methods than PG::Result, they are arguably more useful for viewing the resulting data in rails console. People tend to favor `.exec_query` since you can use `result.columns` and `result.rows` to view the data better. Another perk is that you can convert the result to a more readable hash with `.to_hash`.
+  This produces a ActiveRecord::Result object. Ironically, ActiveRecord::Result does not offer the ActiveRecord conveniences of associations and dot notation. ActiveRecord::Result is more like PG::Result; and though it has fewer methods than PG::Result, they are arguably more useful for viewing the resulting data in rails console. Indeed, people tend to favor .exec_query because calling .columns, .rows, and .to_hash on the results improve their readability.
 
   Like PG::Result, ActiveRecord::Result is an array of stringified hashes, so the Ruby and Rails methods apply here as well.
 
@@ -77,9 +77,9 @@ But where ActiveRecord::Base.connection offers speed, Model.find_by_sql offers c
     Book.find_by_sql(sql)
   ```
 
-  Unlike with ActiveRecord::Base, calling `.find_by_sql` on a one of your active record models provides an ActiveModel result object. As mentioned above, this gives you all the conveniences of ActiveRecord. The tradeoff is the additional time it takes ActiveRecord to instantiate the models.
+  Unlike with ActiveRecord::Base, calling .find_by_sql on a one of your active record models provides an ActiveRecord object rather than a stringified hash. As mentioned above, this gives you all the conveniences of ActiveRecord at the expense of performance. But unless you are grabbing thousands of records, the performance loss is unnoticeable.
 
-  Another downside of `find_by_sql` that is not present in the `ActiveRecord::Base` methods is that if you are joining other tables and trying to view the results in rails console, the return value doesn't show any columns from joined tables. However, those columns are still part of the results and can be accessed, as demonstrated below.
+  Another downside of find_by_sql that is not present in the ActiveRecord::Base methods is that if you are joining other tables and trying to view the results in rails console, the return value doesn’t show any columns from joined tables. However, those columns are still part of the results and can be accessed, as demonstrated below.
 
   ```rb
   books = <<-SQL
@@ -99,4 +99,8 @@ But where ActiveRecord::Base.connection offers speed, Model.find_by_sql offers c
   ```
 
 ## Further Reading
-  - http://patshaughnessy.net/2010/9/4/activerecord-with-large-result-sets---part-1-select_all-vs--find
+  - ActiveRecord::Base, http://api.rubyonrails.org/classes/ActiveRecord/Base.html
+  - PG::Result, https://deveiate.org/code/pg/PG/Result.html
+  - ActiveRecord::Result, http://www.rubydoc.info/docs/rails/3.2.8/ActiveRecord/Result
+  - find_by_sql, https://apidock.com/rails/ActiveRecord/Querying/find_by_sql
+  - Speed vs. Convenience, http://patshaughnessy.net/2010/9/4/activerecord-with-large-result-sets---part-1-select_all-vs--find
